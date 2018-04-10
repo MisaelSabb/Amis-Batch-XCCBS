@@ -8,5 +8,15 @@ var Config={
 	 * dbName on firebase
 	 * @type {String}
 	 */
-	dbName:""
+	dbName:"",
+    /**
+	 * ETL ENDPOINTS
+	 * @type {String}
+	 */    
+    ETLEndpoints:"",    
+    /**
+	 * ETL ETLjobNameAndParameters
+	 * @type {String}
+	 */	
+    ETLjobNameAndParameters:""
 };

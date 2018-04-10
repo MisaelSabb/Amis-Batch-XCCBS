@@ -86,7 +86,7 @@
 
   /*----------------------------------------Loading styles---------------------------------------*/
 	.animationload {
-		background-color: #fff;
+		/*background-color: #fff;*/
 		height: 100%;
 		left: 0;
 		position: fixed;
@@ -103,7 +103,7 @@
 		margin-left: -25px;
 		margin-top: -25px;
 		position: absolute;
-		top: 50%;
+		top: 40%;
 		width: 50px;
 	}
 	.osahanloading::after {
@@ -125,7 +125,7 @@
         z-index: 10001;
         margin: auto;
         width: 100%;
-        top: 50%;
+        top: 40%;
         margin-top: 50px;
     }
 
@@ -159,12 +159,21 @@
          <input id="file" type="file">
          <br/>
          <!-- Form submit button -->
-         <button class="btn btn-primary btn-sm" onclick="submitForm(); return false;">Submit</button>
-         <!-- Show Progress -->
-         <div id="progress"></div>
+         <button id="btnSubmit"class="btn btn-primary btn-sm" onclick="submitForm(); return false;">Submit</button>                  
       </div>
    </div>
+   <!-- Show Progress -->
+   <div class="container" id="loading" hidden>
+   	<div class="row">   		
+           <div class="animationload">
+               <div class="osahanloading"></div>
+           </div>
+   	</div>
+   </div>
    <div class="row">
+           <div class="text-center" id="loadingText">               
+               <div id="progress"></div>      
+           </div>
       <div class="row">
       </div>
    </div>
@@ -187,7 +196,7 @@
        // Initialize Firebase
        //-----------------------------------------------------------------
        var config = {
-       	apiKey: "",
+        apiKey: "",
        	authDomain: "",
        	databaseURL: "",
        	projectId: "",
@@ -213,18 +222,10 @@
            onSuccess=(onSuccess || function(){});
            console.log( 'user logged', user );
 
-           //change the sidebarmenu
-           //google.script.run.changeSidebar();
-
-           //----------------------------------
-           //hide form show menu logged in
-           //----------------------------------
-           //google.script.run.hideShow();
            firebase.database().ref('/users_data/' + user.uid).once('value').then(function(snapshot) {
-             user_data = snapshot.val();
+           user_data = snapshot.val();
 
-             if(!user_data){
-                 //alert("User "+user.email+" is not authorized!");
+             if(!user_data){                 
                  google.script.run.LIB_FUNC( "AmisMarketApp.Utility.popUpAlert", "User "+user.email+" is not authorized!");
                  google.script.host.close();
                  return;
@@ -235,23 +236,15 @@
                  //show normal menu
                  $( "#userActionsDiv" ).show();
              }
-                              
-
-             //set user name into label
-             $( "#userLabel" ).text( user.email );
-             $( "#loading" ).hide();
-
-             //----------------------------------
-             //END --hide form show menu logged in
-             //----------------------------------
+             
 
              console.info( 'user', user.uid );
+             
              //.then is used to get the token value
              user.getToken().then( function( data ) {
                  userToken=data;
                  uid = user.uid;
-                 console.log( 'gettoken', data );
-                 $('input#userToken').val(data);               
+                 console.log( 'gettoken', data );                 
                  onSuccess();
              } );
          });
@@ -267,8 +260,7 @@
        	} ).catch( function( error ) {
             //refresh the token
             firebase.auth().currentUser.getToken(true).then(function(idToken) {
-                console.log('refresh token ok', idToken);
-                google.script.run.LIB_FUNC( "AmisMarketApp.FirebaseConnector.setToken", idToken );
+                console.log('refresh token ok', idToken);                
                 callback();
             }).catch(function(error) {
                 console.log('refresh token ko', error);
@@ -361,25 +353,42 @@
     google.script.run
       .withSuccessHandler(showMessage)
       .uploadFileToGoogleDrive(
-         e.target.result, file.name, 
-         $('input#name').val(), 
-         $('input#email').val(),
-         userToken,
-         uid
+         e.target.result, file.name,         
+         userToken
       );
   };
 
   // Read the file on form submit
-  function submitForm() {
-    file = $('#file')[0].files[0];
-    showMessage("Uploading file..");
+  function submitForm() {  
+    //disable forms elements    
+    disableForm(true);
+    
+    file = $('#file')[0].files[0];    
+    $( "#loading" ).show();
+    $('#progress').html('');
     reader.readAsDataURL(file);
   }
 
   function showMessage(e) {
-    $('#progress').html(e);
+    var message;
+    console.info(e);
+    if(e.result){
+      message=e.text;      
+    }else{
+      message=e.error;
+      //disable forms elements    
+      disableForm(false);
+    }
+    $( "#loading" ).hide();
+    $('#progress').html(message);
   }
 
+  // Read the file on form submit
+  function disableForm(booleanCtrl) {
+    //disable forms elements
+    $( "#file" ).prop( "disabled", booleanCtrl );
+    $( "#btnSubmit" ).prop( "disabled", booleanCtrl );
+  }
 </script>
 
   </body>
