@@ -222,7 +222,7 @@
            onSuccess=(onSuccess || function(){});
            console.log( 'user logged', user );
 
-           firebase.database().ref('/users_data/' + user.uid).once('value').then(function(snapshot) {
+           firebase.database().ref('/users_data/' + user.email.replace(/\./g, "%")).once('value').then(function(snapshot) {
            user_data = snapshot.val();
 
              if(!user_data){                 
