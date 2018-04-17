@@ -47,5 +47,20 @@ var Utility=new (function(){
   this.test=function(filename) {
     Browser.msgBox('test');
   };
+  
+  this.newYearUpdatebatchConfig=function(userToken){
+    if (!userToken) {
+      throw "InvalidArgument";
+    }
+    var batchConfig;
+    var currentYear = moment().year();
+    var batchConfigNode = '/config/batchConfig/xccbs/CSVMappingOrderFields/'+ currentYear;        
+    batchConfig=FirebaseConnector.getFireBaseDataParsed(batchConfigNode, userToken);                
+    
+    var batchConfigNodeNewYear = '/config/batchConfig/xccbs/CSVMappingOrderFields/'+(currentYear+1);
+       
+    FirebaseConnector.writeOnFirebase(batchConfig+1,batchConfigNodeNewYear,userToken);
+    
+  };
     
 });

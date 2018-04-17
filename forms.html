@@ -159,7 +159,10 @@
          <input id="file" type="file">
          <br/>
          <!-- Form submit button -->
-         <button id="btnSubmit"class="btn btn-primary btn-sm" onclick="submitForm(); return false;">Submit</button>                  
+         <button id="btnSubmit"class="btn btn-primary btn-sm" onclick="submitForm(); return false;">SUBMIT</button>                  
+
+          <!-- invoke change of season -->
+         <button id="invokeChangeOfSeason"class="btn btn-primary btn-sm" onclick="invokeChangeOfSeason(); return false;">Invoke Change Of Season</button>                  
       </div>
    </div>
    <!-- Show Progress -->
@@ -367,6 +370,15 @@
     $( "#loading" ).show();
     $('#progress').html('');
     reader.readAsDataURL(file);
+  }
+  
+  // invoke change of season
+  function invokeChangeOfSeason() {  
+    $( "#invokeChangeOfSeason" ).prop( "disabled", true );
+    google.script.run      
+      .invokeChangeOfSeasonConfig(             
+         userToken
+      );
   }
 
   function showMessage(e) {

@@ -8,6 +8,11 @@ function doGet(e) {
     .setTitle("");
 }
 
+function invokeChangeOfSeasonConfig(userToken){
+  Utility.newYearUpdatebatchConfig(userToken);
+  return 'ok';
+}
+
 function uploadFileToGoogleDrive(data, file, userToken) {
   
   try {
