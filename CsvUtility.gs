@@ -43,13 +43,27 @@ var CsvUtility=new function(){
       //get how many years should look for
       var lenghtOfLoop= fullYear-batchCSVBaseYear;
       
+      //need to take the last column of csv uploaded
+      //if the last column of the csv equals at current year + 1 
+      //I need to increment the loop by one.
+      var lastCsvColumn = values[0][values[0].length-1];
+      
+      var incrementer = fullYear<parseInt(lastCsvColumn) ? 1 : 0;
+      Logger.log(lenghtOfLoop)
+      Logger.log(fullYear)
+      Logger.log(incrementer)
+      Logger.log(lastCsvColumn)
+      
+      
+      
+      
       //loop the CSV elements
       for(var i=1; i<lenght;i++){
         //jsonRow
         var jsonRow={};      
         
         //loop and set the year keys into the json
-        for(var j=0; j<=lenghtOfLoop;j++){                      
+        for(var j=0; j<=(lenghtOfLoop+incrementer);j++){                      
           //to avoid undefined keys
           if(batchCSVMapping[batchCSVBaseYear+j]){          
             //set key into jsonRow
