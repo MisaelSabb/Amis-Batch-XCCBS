@@ -18,5 +18,21 @@ var ETLCaller = new function() {
        Logger.log(resp);
        Logger.log(resp.getResponseCode());       
  	} 
+     /**
+	 * call the ETL cloud Jobs
+	 * @param  {string} countryLabel label of the country
+	 * @return  NO RETURN	 
+	 */
+	 this.runCloudETLJob = function() {
+       var options={
+         'method' : 'post',
+         'contentType': 'application/json',         
+         'payload' : JSON.stringify({"jobNameAndParameters":Config.ETLjobNameAndParameters})
+       };
+
+       var resp= UrlFetchApp.fetch( Config.ETLCloudEndpoints, options );
+       Logger.log(resp);
+       Logger.log(resp.getResponseCode());       
+ 	} 
 
 };
