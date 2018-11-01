@@ -41,6 +41,8 @@ function uploadFileToGoogleDrive(data, file, userToken) {
     if(elaborationResult.result){
       //call ETL PROCESS
       ETLCaller.runETLJob();
+      
+      ETLCaller.runCloudETLJob();
     }
     
     elaborationResult.result ? elaborationResult.text='Data Uploaded Successfully. Please close the browser.' : elaborationResult.text='';
